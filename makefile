@@ -4,6 +4,7 @@ DOCKER_COMPOSE = docker compose --project-name tissup-api --project-directory .
 PROJECT_NAME = tissup-api
 PACKAGE ?= default-package
 DEV ?=
+ENTITY ?= 
 
 install: dc-up
 
@@ -20,7 +21,7 @@ package-install:
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer require $(PACKAGE) $(DEV); \
 
 entity:
-	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:entity 
+	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:entity $(ENTITY) 
 
 user:
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:user
