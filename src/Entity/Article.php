@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,20 +16,28 @@ class Article
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 75)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?int $width = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $width = null;
 
-    #[ORM\Column]
-    private ?int $height = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $height = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $matter = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2)]
-    private ?string $price = null;
+    /**
+     * @var Collection<int, Carts>
+     */
+    #[ORM\ManyToMany(targetEntity: Carts::class, mappedBy: 'articles')]
+    private Collection $carts;
+
+    public function __construct()
+    {
+        $this->carts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -46,24 +56,24 @@ class Article
         return $this;
     }
 
-    public function getWidth(): ?int
+    public function getWidth(): ?string
     {
         return $this->width;
     }
 
-    public function setWidth(int $width): static
+    public function setWidth(string $width): static
     {
         $this->width = $width;
 
         return $this;
     }
 
-    public function getHeight(): ?int
+    public function getHeight(): ?string
     {
         return $this->height;
     }
 
-    public function setHeight(int $height): static
+    public function setHeight(string $height): static
     {
         $this->height = $height;
 
@@ -82,14 +92,29 @@ class Article
         return $this;
     }
 
-    public function getPrice(): ?string
+    /**
+     * @return Collection<int, Carts>
+     */
+    public function getCarts(): Collection
     {
-        return $this->price;
+        return $this->carts;
     }
 
-    public function setPrice(string $price): static
+    public function addCart(Carts $cart): static
     {
-        $this->price = $price;
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->addArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Carts $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeArticle($this);
+        }
 
         return $this;
     }
