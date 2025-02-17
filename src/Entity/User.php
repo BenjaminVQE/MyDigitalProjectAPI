@@ -3,14 +3,27 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ApiResource]
+#[Delete]
+#[Get]
+#[Put]
+#[GetCollection]
+#[Post]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,36 +32,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotNull]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Assert\NotNull]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotNull]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotNull]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotNull]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotNull]
     private ?string $company = null;
 
-    #[ORM\Column]
-    private ?int $phoneNumber = null;
+    #[ORM\Column(length: 20)]
+    #[Assert\NotNull]
+    private ?string $phoneNumber = null;
 
     /**
      * @var Collection<int, Address>
      */
-    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', cascade: ["persist", "remove"])]
     private Collection $address;
 
     /**
@@ -181,12 +201,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(int $phoneNumber): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
