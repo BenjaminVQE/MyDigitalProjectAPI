@@ -29,6 +29,9 @@ class Address
     #[ORM\Column]
     private ?int $numberStreet = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $nameStreet = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class Address
     public function setNumberStreet(int $numberStreet): static
     {
         $this->numberStreet = $numberStreet;
+
+        return $this;
+    }
+
+    public function getNameStreet(): ?string
+    {
+        return $this->nameStreet;
+    }
+
+    public function setNameStreet(string $nameStreet): static
+    {
+        $this->nameStreet = $nameStreet;
 
         return $this;
     }

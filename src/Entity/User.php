@@ -61,14 +61,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull]
     private ?string $company = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 20)]
     #[Assert\NotNull]
-    private ?int $phoneNumber = null;
+    private ?string $phoneNumber = null;
 
     /**
      * @var Collection<int, Address>
      */
-    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', cascade: ["persist", "remove"])]
     private Collection $address;
 
     /**
@@ -201,12 +201,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(int $phoneNumber): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
