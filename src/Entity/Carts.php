@@ -6,8 +6,29 @@ use App\Repository\CartsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiProperty;
+
 
 #[ORM\Entity(repositoryClass: CartsRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Put(),
+        new Delete,
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class Carts
 {
     #[ORM\Id]
@@ -16,6 +37,9 @@ class Carts
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'carts')]
+    #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
+    #[ApiProperty(readableLink: false, writableLink: false)]
     private ?User $user = null;
 
     /**
@@ -28,6 +52,8 @@ class Carts
      * @var Collection<int, Article>
      */
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'carts')]
+    #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private Collection $articles;
 
     public function __construct()
