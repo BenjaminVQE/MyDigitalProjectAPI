@@ -15,24 +15,32 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[ApiResource]
-#[Delete]
-#[Get]
-#[Put]
-#[GetCollection]
-#[Post]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Put(),
+        new Delete,
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    
     #[ORM\Column(length: 180)]
     #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private ?string $email = null;
 
     /**
@@ -47,22 +55,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\NotNull]
+    #[Groups(['write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private ?string $company = null;
 
     #[ORM\Column(length: 20)]
     #[Assert\NotNull]
+    #[Groups(['read', 'write'])]
     private ?string $phoneNumber = null;
 
     /**
