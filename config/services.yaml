@@ -19,9 +19,6 @@ services:
             - "../src/DependencyInjection/"
             - "../src/Entity/"
             - "../src/Kernel.php"
-    App\State\UserPasswordHasher:
-        bind:
-            $processor: "@api_platform.doctrine.orm.state.persist_processor"
 
     Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface: "@lexik_jwt_authentication.jwt_manager"
 
