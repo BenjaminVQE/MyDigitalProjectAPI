@@ -14,8 +14,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\State\UserPasswordHasher;
+//use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher as HasherUserPasswordHasher;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -23,8 +26,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
-        new Put(),
+        new Post(processor: UserPasswordHasher::class, validationContext: ['groups' => ['Default', 'user:create']]),
+        new Put(processor: UserPasswordHasher::class),
         new Delete,
     ],
     normalizationContext: ['groups' => ['read']],
@@ -48,6 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
