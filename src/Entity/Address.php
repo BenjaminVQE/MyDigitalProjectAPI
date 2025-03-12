@@ -38,16 +38,20 @@ class Address
     private ?string $city = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $postalCode = null;
 
     #[ORM\ManyToOne(inversedBy: 'address')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?User $user = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?int $numberStreet = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $nameStreet = null;
 
     public function getId(): ?int
