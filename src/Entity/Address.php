@@ -2,10 +2,26 @@
 
 namespace App\Entity;
 
-use App\Repository\AddressRepository;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\AddressRepository;
+use ApiPlatform\Metadata\GetCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+        new Put(),
+        new Delete(),
+    ]
+)]
 class Address
 {
     #[ORM\Id]
@@ -14,9 +30,11 @@ class Address
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $addressType = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $city = null;
 
     #[ORM\Column]
