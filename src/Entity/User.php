@@ -39,7 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private ?string $email = null;
 
@@ -47,34 +47,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 100)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private ?string $company = null;
 
     #[ORM\Column(length: 20)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private ?string $phoneNumber = null;
 

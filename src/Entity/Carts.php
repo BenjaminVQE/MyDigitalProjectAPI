@@ -37,7 +37,7 @@ class Carts
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'carts')]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     #[ApiProperty(readableLink: false, writableLink: false)]
     private ?User $user = null;
@@ -52,7 +52,7 @@ class Carts
      * @var Collection<int, Article>
      */
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'carts')]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private Collection $articles;
 

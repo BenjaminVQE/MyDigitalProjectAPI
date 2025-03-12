@@ -32,12 +32,12 @@ class Order
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?Carts $cart = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull]
+    #[Assert\NotBlank]
     private ?User $user = null;
 
     public function getId(): ?int
