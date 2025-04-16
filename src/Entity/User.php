@@ -88,10 +88,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $address;
 
     /**
-     * @var Collection<int, Carts>
+     * @var Collection<int, Cart>
      */
-    #[ORM\OneToMany(targetEntity: Carts::class, mappedBy: 'user')]
-    private Collection $carts;
+    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'user')]
+    private Collection $cart;
 
     /**
      * @var Collection<int, Order>
@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->address = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        $this->cart = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -260,26 +260,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Carts>
+     * @return Collection<int, Cart>
      */
-    public function getCarts(): Collection
+    public function getCart(): Collection
     {
-        return $this->carts;
+        return $this->cart;
     }
 
-    public function addCart(Carts $cart): static
+    public function addCart(Cart $cart): static
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
+        if (!$this->cart->contains($cart)) {
+            $this->cart->add($cart);
             $cart->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeCart(Carts $cart): static
+    public function removeCart(Cart $cart): static
     {
-        if ($this->carts->removeElement($cart)) {
+        if ($this->cart->removeElement($cart)) {
             // set the owning side to null (unless already changed)
             if ($cart->getUser() === $this) {
                 $cart->setUser(null);

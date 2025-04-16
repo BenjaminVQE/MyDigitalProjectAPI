@@ -33,7 +33,7 @@ class Order
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[Assert\NotBlank]
-    private ?Carts $cart = null;
+    private ?Cart $cart = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
@@ -45,12 +45,12 @@ class Order
         return $this->id;
     }
 
-    public function getCart(): ?Carts
+    public function getCart(): ?Cart
     {
         return $this->cart;
     }
 
-    public function setCart(?Carts $cart): static
+    public function setCart(?Cart $cart): static
     {
         $this->cart = $cart;
 
