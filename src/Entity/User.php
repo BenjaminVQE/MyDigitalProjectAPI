@@ -14,8 +14,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\State\UserPasswordHasher;
+//use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher as HasherUserPasswordHasher;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -23,8 +26,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
-        new Put(),
+        new Post(processor: UserPasswordHasher::class, validationContext: ['groups' => ['Default', 'user:create']]),
+        new Put(processor: UserPasswordHasher::class),
         new Delete,
     ],
     normalizationContext: ['groups' => ['read']],
@@ -47,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
@@ -85,10 +88,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $address;
 
     /**
-     * @var Collection<int, Carts>
+     * @var Collection<int, Cart>
      */
-    #[ORM\OneToMany(targetEntity: Carts::class, mappedBy: 'user')]
-    private Collection $carts;
+    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'user')]
+    private Collection $cart;
 
     /**
      * @var Collection<int, Order>
@@ -99,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->address = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        $this->cart = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -257,26 +260,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Carts>
+     * @return Collection<int, Cart>
      */
-    public function getCarts(): Collection
+    public function getCart(): Collection
     {
-        return $this->carts;
+        return $this->cart;
     }
 
-    public function addCart(Carts $cart): static
+    public function addCart(Cart $cart): static
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
+        if (!$this->cart->contains($cart)) {
+            $this->cart->add($cart);
             $cart->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeCart(Carts $cart): static
+    public function removeCart(Cart $cart): static
     {
-        if ($this->carts->removeElement($cart)) {
+        if ($this->cart->removeElement($cart)) {
             // set the owning side to null (unless already changed)
             if ($cart->getUser() === $this) {
                 $cart->setUser(null);

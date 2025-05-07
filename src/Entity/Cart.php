@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\CartsRepository;
+use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiProperty;
 
 
-#[ORM\Entity(repositoryClass: CartsRepository::class)]
+#[ORM\Entity(repositoryClass: CartRepository::class)]
 #[ApiResource(
     operations: [
         new Get(),
@@ -29,14 +29,14 @@ use ApiPlatform\Metadata\ApiProperty;
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']],
 )]
-class Carts
+class Cart
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'carts')]
+    #[ORM\ManyToOne(inversedBy: 'cart')]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     #[ApiProperty(readableLink: false, writableLink: false)]
@@ -51,7 +51,7 @@ class Carts
     /**
      * @var Collection<int, Article>
      */
-    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'carts')]
+    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'cart')]
     #[Assert\NotBlank]
     #[Groups(['read', 'write'])]
     private Collection $articles;

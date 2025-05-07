@@ -20,8 +20,8 @@ class AuthController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/auth', name: 'auth', methods: ['POST'])]
-    public function authenticate(Request $request): JsonResponse
+    #[Route('/api/auth', name: 'auth', methods: ['POST'])]
+    public function authenticate(): JsonResponse
     {
         $user = $this->security->getUser();
 

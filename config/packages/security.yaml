@@ -13,13 +13,22 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        auth:
-            pattern: ^/auth
+
+        login:
+            pattern: ^/api/auth
             stateless: true
             json_login:
-                check_path: /auth
+                check_path: /api/auth
+                username_path: email
+                password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: app_user_provider
+            jwt: ~
 
         main:
             lazy: true
@@ -34,7 +43,33 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: PUBLIC_ACCESS }
+        - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: POST }
+        - {
+              path: ^/api/users,
+              roles: IS_AUTHENTICATED_FULLY,
+              methods: [GET, PUT],
+          }
+        - { path: ^/api/users, roles: ROLE_ADMIN, methods: DELETE }
+        - {
+              path: ^/api/orders,
+              roles: IS_AUTHENTICATED_FULLY,
+              methods: [GET, POST, PUT],
+          }
+        - { path: ^/api/orders, roles: ROLE_ADMIN, methods: DELETE }
+        - {
+              path: ^/api/adresses,
+              roles: IS_AUTHENTICATED_FULLY,
+              methods: [GET, POST, PUT],
+          }
+        - { path: ^/api/adresses, roles: ROLE_ADMIN, methods: DELETE }
+        - { path: ^/api/articles, roles: IS_AUTHENTICATED_FULLY, methods: GET }
+        - {
+              path: ^/api/articles,
+              roles: ROLE_ADMIN,
+              methods: [POST, PUT, DELETE],
+          }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
