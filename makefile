@@ -19,7 +19,7 @@ sf-install: ## Install composer packages
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer install
 
 package-install: ## Install package PACKAGE=...
-	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer require $(PACKAGE) $(PARAMETER); \
+	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer require $(PARAMETER) $(PACKAGE) ; \
 
 entity: ## Create entity
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:entity $(ENTITY) 
