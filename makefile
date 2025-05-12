@@ -6,28 +6,44 @@ PACKAGE ?= default-package
 PARAMETER ?=
 ENTITY ?= 
 
-install: dc-up
+install: ## Install Api
+install: dc-up 
 
-exec:
-	docker container exec -it
+## Install production
+install-prod: .env
+	docker compose -p $(PROJECT_NAME) -f compose.prod.yaml up  --pull always -d --wait $(NO_DEPS)
+
+exec: ## Execute a command in the container
+	docker exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 bash
 
 dc-up: .env
 	PROJECT_NAME=$(PROJECT_NAME) $(DOCKER_COMPOSE) up --pull always -d --wait $(NO_DEPS)
 
-sf-install:
+sf-install: ## Install composer packages
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer install
 
-package-install:
-	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer require $(PACKAGE) $(PARAMETER); \
+package-install: ## Install package PACKAGE=...
+	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer require $(PARAMETER) $(PACKAGE) ; \
 
-entity:
+entity: ## Create entity
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:entity $(ENTITY) 
 
-user:
+user: ## Create User entity
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:user
 
-migration:
+migration: ## Create migrations
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console make:migration
 
-migrate:
+migrate: ## Migrate migrations to data base
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console doctrine:migrations:migrate
+
+load-fix: ## Load fixtures
+	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console doctrine:fixtures:load
+
+generate-jwt: ## Génère les clés JWT et met à jour .env.local
+	./generate-jwt.sh
+
+help: ## Display help
+	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-20s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+
+.DEFAULT_GOAL := help

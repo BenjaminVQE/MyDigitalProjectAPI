@@ -7,6 +7,8 @@
 /public/bundles/
 /var/
 /vendor/
-/.env
 ###< symfony/framework-bundle ###
-!.env.dev
+/.env.local
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

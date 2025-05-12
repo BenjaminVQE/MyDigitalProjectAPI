@@ -2,15 +2,38 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\State\UserPasswordHasher;
+//use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher as HasherUserPasswordHasher;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(processor: UserPasswordHasher::class, validationContext: ['groups' => ['Default', 'user:create']]),
+        new Put(processor: UserPasswordHasher::class),
+        new Delete,
+    ],
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -19,43 +42,56 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Groups(['write'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
     private ?string $company = null;
 
-    #[ORM\Column]
-    private ?int $phoneNumber = null;
+    #[ORM\Column(length: 20)]
+    #[Assert\NotBlank]
+    #[Groups(['read', 'write'])]
+    private ?string $phoneNumber = null;
 
     /**
      * @var Collection<int, Address>
      */
-    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', cascade: ["persist", "remove"])]
     private Collection $address;
 
     /**
-     * @var Collection<int, Carts>
+     * @var Collection<int, Cart>
      */
-    #[ORM\OneToMany(targetEntity: Carts::class, mappedBy: 'user')]
-    private Collection $carts;
+    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'user')]
+    private Collection $cart;
 
     /**
      * @var Collection<int, Order>
@@ -66,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->address = new ArrayCollection();
-        $this->carts = new ArrayCollection();
+        $this->cart = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
@@ -181,12 +217,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(int $phoneNumber): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
@@ -224,26 +260,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Carts>
+     * @return Collection<int, Cart>
      */
-    public function getCarts(): Collection
+    public function getCart(): Collection
     {
-        return $this->carts;
+        return $this->cart;
     }
 
-    public function addCart(Carts $cart): static
+    public function addCart(Cart $cart): static
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts->add($cart);
+        if (!$this->cart->contains($cart)) {
+            $this->cart->add($cart);
             $cart->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeCart(Carts $cart): static
+    public function removeCart(Cart $cart): static
     {
-        if ($this->carts->removeElement($cart)) {
+        if ($this->cart->removeElement($cart)) {
             // set the owning side to null (unless already changed)
             if ($cart->getUser() === $this) {
                 $cart->setUser(null);
