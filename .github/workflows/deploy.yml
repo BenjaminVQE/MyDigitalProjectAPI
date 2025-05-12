@@ -35,7 +35,7 @@ jobs:
         run: |
           ssh $VPS_USER@$VPS_IP << 'EOF'
             echo "--Pull image--"
-            sudo docker pull $REGISTRY_NAME/tissup-api
+            docker pull $REGISTRY_NAME/tissup-api
 
             echo "--Stop and remove container--"
             sudo docker stop tissup-api-container || true
