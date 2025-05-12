@@ -69,31 +69,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api, roles: PUBLIC_ACCESS }
-        - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: POST }
-        - {
-              path: ^/api/users,
-              roles: IS_AUTHENTICATED_FULLY,
-              methods: [GET, PUT],
-          }
-        - { path: ^/api/users, roles: ROLE_ADMIN, methods: [GET, DELETE] }
-        - {
-              path: ^/api/orders,
-              roles: IS_AUTHENTICATED_FULLY,
-              methods: [GET, POST, PUT],
-          }
-        - { path: ^/api/orders, roles: ROLE_ADMIN, methods: DELETE }
-        - {
-              path: ^/api/adresses,
-              roles: IS_AUTHENTICATED_FULLY,
-              methods: [GET, POST, PUT],
-          }
-        - { path: ^/api/adresses, roles: ROLE_ADMIN, methods: DELETE }
-        - { path: ^/api/articles, roles: PUBLIC_ACCESS, methods: GET }
-        - {
-              path: ^/api/articles,
-              roles: ROLE_ADMIN,
-              methods: [POST, PUT, DELETE],
-          }
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
