@@ -2,8 +2,6 @@
 	{$CADDY_GLOBAL_OPTIONS}
 
 	frankenphp {
-		# NumThreads sets the number of PHP threads to start. Default: 2x the number of available CPUs.
-		num_threads 16
 		{$FRANKENPHP_CONFIG}
 	}
 
