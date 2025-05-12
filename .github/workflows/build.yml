@@ -14,6 +14,7 @@ jobs:
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
+      ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -21,6 +22,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
+      - name: Update .env before build
+        run: |
+          echo "Updating .env"
+          sed -i 's/^ROOT_PASSWORD=.*/ROOT_PASSWORD="'${ROOT_PASSWORD}'"/' .env
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY_NAME/tissup-api .

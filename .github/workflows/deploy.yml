@@ -43,16 +43,4 @@ jobs:
 
             echo "--Run new container--"
             sudo docker run -p 8001:80 --name tissup-api-container -d $REGISTRY_NAME/tissup-api
-
-            echo "--Copy .env out of container--"
-            sudo docker cp tissup-api-container:/app/.env ~/temp.env
-
-            echo "--Update .env variable--"
-            sed -i 's/^ROOT_PASSWORD=.*/ROOT_PASSWORD="'${ROOT_PASSWORD}'"/' ~/temp.env
-
-            echo "--Copy updated .env back to container--"
-            sudo docker cp ~/temp.env tissup-api-container:/app/.env
-
-            echo "--Dump env--"
-            sudo docker exec tissup-api-container composer dump-env prod
           EOF
