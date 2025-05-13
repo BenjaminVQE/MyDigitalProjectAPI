@@ -16,6 +16,7 @@ jobs:
       VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
       ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
+      SERVER_NAME: ${{ secrets.SERVER_NAME }}
 
     steps:
       - name: Checkout code
@@ -42,8 +43,8 @@ jobs:
             sudo docker rm tissup-api-container || true
 
             echo "--Run new container--"
-            sudo docker run -p 8001:80 --name tissup-api-container -d $REGISTRY_NAME/tissup-api
+            sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -d $REGISTRY_NAME/tissup-api
 
             echo "--Add at network--"
-            
+
           EOF
