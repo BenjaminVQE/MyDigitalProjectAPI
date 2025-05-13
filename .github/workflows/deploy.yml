@@ -43,4 +43,7 @@ jobs:
 
             echo "--Run new container--"
             sudo docker run -p 8001:80 --name tissup-api-container -d $REGISTRY_NAME/tissup-api
+
+            echo "--Add at network--"
+            
           EOF
