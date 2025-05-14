@@ -1,36 +1,31 @@
 {
-    {$CADDY_GLOBAL_OPTIONS}
+	{$CADDY_GLOBAL_OPTIONS}
 
-    frankenphp {
-        {$FRANKENPHP_CONFIG}
-    }
+	frankenphp {
+		{$FRANKENPHP_CONFIG}
+	}
 
-    order php_server before file_server
+	# https://caddyserver.com/docs/caddyfile/directives#sorting-algorithm
+	order php_server before file_server
 }
 
 {$CADDY_EXTRA_CONFIG}
 
 {$SERVER_NAME:localhost} {
     {$TLS}
-    
-    log {
-        format filter {
-            wrap console
-            fields {
-                uri query {
-                    replace authorization REDACTED
-                }
-            }
-        }
-    }
 
-    root * /app/public
+	log tissup-api {
+		output file var/log/caddy.log
+		level  INFO
+	}
 
-    encode zstd gzip
+	root * /app/public
+	encode zstd gzip
 
-    {$CADDY_SERVER_EXTRA_DIRECTIVES}
+	{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
-    header ?Permissions-Policy "browsing-topics=()"
+	# Disable Topics tracking if not enabled explicitly: https://github.com/jkarlin/topics
+	header ?Permissions-Policy "browsing-topics=()"
 
-    php_server
+	php_server
 }
