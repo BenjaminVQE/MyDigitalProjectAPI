@@ -47,7 +47,7 @@ jobs:
           echo "--Stop and remove container--"
           sudo docker stop tissup-api-container || true
           sudo docker rm tissup-api-container || true
-
+          echo $SERVER_NAME
           echo "--Run new container--"
           sudo docker run -d -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -p 8001:443 -v /etc/Tissup:/app/frankenphp --name tissup-api-container $REGISTRY_NAME/tissup-api
 
