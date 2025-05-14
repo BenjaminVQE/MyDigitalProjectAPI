@@ -3,6 +3,7 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
+        container_name: php-api
         volumes:
             - "./:/usr/src/app"
         restart: on-failure
