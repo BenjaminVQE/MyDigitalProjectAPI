@@ -15,8 +15,11 @@ jobs:
       VPS_IP: ${{ secrets.VPS_IP }}
       VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
-      SERVER_NAME: ${{ secrets.SERVER_NAME }}
+      SERVER_NAME: ${{ vars.SERVER_NAME }}
+      TLS: ${{ vars.TLS }}
 
     steps:
       - name: Checkout code
@@ -46,7 +49,7 @@ jobs:
           sudo docker rm tissup-api-container || true
 
           echo "--Run new container--"
-          sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -d $REGISTRY_NAME/tissup-api
+          sudo docker run -d -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -p 8001:443 -v /etc/Tissup:/app/frankenphp --name tissup-api-container $REGISTRY_NAME/tissup-api
 
           echo "--Add at network--"
           docker network connect tissup-api_default tissup-api-container
