@@ -43,8 +43,8 @@ jobs:
             sudo docker rm tissup-api-container || true
 
             echo "--Run new container--"
-            sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -d $REGISTRY_NAME/tissup-api
+            sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -d $REGISTRY_NAME/tissup-api
 
             echo "--Add at network--"
-
+            docker network connect tissup-api_default tissup-api-container
           EOF
