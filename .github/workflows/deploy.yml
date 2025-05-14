@@ -32,19 +32,22 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan $VPS_IP >> ~/.ssh/known_hosts
 
-      - name: Deploy and Update .env
+      - name: Deploy
         run: |
           ssh $VPS_USER@$VPS_IP << EOF
-            echo "--Pull image--"
-            docker pull $REGISTRY_NAME/tissup-api
+          echo "--Login to registry--"
+          echo $REGISTRY_PASSWORD | docker login $REGISTRY_NAME -u $REGISTRY_USERNAME --password-stdin
 
-            echo "--Stop and remove container--"
-            sudo docker stop tissup-api-container || true
-            sudo docker rm tissup-api-container || true
+          echo "--Pull image--"
+          docker pull $REGISTRY_NAME/tissup-api
 
-            echo "--Run new container--"
-            sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -d $REGISTRY_NAME/tissup-api
+          echo "--Stop and remove container--"
+          sudo docker stop tissup-api-container || true
+          sudo docker rm tissup-api-container || true
 
-            echo "--Add at network--"
-            docker network connect tissup-api_default tissup-api-container
+          echo "--Run new container--"
+          sudo docker run -p 8001:80 --name tissup-api-container -e SERVER_NAME=$SERVER_NAME -e TLS=$TLS -d $REGISTRY_NAME/tissup-api
+
+          echo "--Add at network--"
+          docker network connect tissup-api_default tissup-api-container
           EOF
