@@ -9,15 +9,14 @@ ENTITY ?=
 install: ## Install Api
 install: dc-up 
 
-## Install production
-install-prod: .env
-	docker compose -p $(PROJECT_NAME) -f compose.prod.yaml up  --pull always -d --wait $(NO_DEPS)
-
 exec: ## Execute a command in the container
 	docker exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 bash
 
 dc-up: .env
 	PROJECT_NAME=$(PROJECT_NAME) $(DOCKER_COMPOSE) up --pull always -d --wait $(NO_DEPS)
+
+dc-down: .env
+	PROJECT_NAME=$(PROJECT_NAME) $(DOCKER_COMPOSE) down -v
 
 sf-install: ## Install composer packages
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer install
