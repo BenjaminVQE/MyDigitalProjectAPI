@@ -28,8 +28,8 @@ COPY --link --chmod=755 docker/docker-entrypoint.sh /usr/local/bin/docker-entryp
 
 WORKDIR /usr/src/app
 
-COPY ./composer.json /usr/src/app/composer.json
-COPY ./composer.lock /usr/src/app/composer.lock
+COPY ../../composer.json /usr/src/app/composer.json
+COPY ../../composer.lock /usr/src/app/composer.lock
 
 RUN PATH=$PATH:/usr/src/app/vendor/bin:bin
 
@@ -37,4 +37,4 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN composer install --no-scripts --no-progress --prefer-dist
 
-COPY . .
+COPY ../../ .
