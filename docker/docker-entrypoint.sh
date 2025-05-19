@@ -36,6 +36,3 @@ setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
 setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 
 echo 'PHP app ready!'
-
-echo "Start PHP Entrypoint : '$@'"
-exec docker-php-entrypoint "$@"

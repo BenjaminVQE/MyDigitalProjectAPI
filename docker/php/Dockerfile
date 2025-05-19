@@ -1,4 +1,4 @@
-FROM php:8.3.21-fpm
+FROM php:8.3-fpm
 
 RUN mkdir -p /usr/src/app \
     && apt-get update \
@@ -38,10 +38,3 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN composer install --no-scripts --no-progress --prefer-dist
 
 COPY . .
-
-RUN groupadd -g 1000 app && useradd -u 1000 -g app -m app
-USER app
-
-ENTRYPOINT ["docker-entrypoint"]
-
-CMD ["php-fpm"]

@@ -15,6 +15,9 @@ exec: ## Execute a command in the container
 dc-up: .env
 	PROJECT_NAME=$(PROJECT_NAME) $(DOCKER_COMPOSE) up --pull always -d --wait $(NO_DEPS)
 
+dc-down: .env
+	PROJECT_NAME=$(PROJECT_NAME) $(DOCKER_COMPOSE) down -v
+
 sf-install: ## Install composer packages
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 composer install
 
