@@ -2,7 +2,7 @@ name: Build Image and Push Registry
 
 on:
   push:
-    branches: ["feat-refresh-serverweb"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
