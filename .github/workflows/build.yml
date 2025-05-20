@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "Updating .env"
           sed -i 's/^ROOT_PASSWORD=.*/ROOT_PASSWORD="'${ROOT_PASSWORD}'"/' .env
-          sed -i 's/@db\//@mysqlDb\//g' .env
+          sed -i 's/^APP_ENV=.*/APP_ENV="'prod'"/' .env
       - name: Build Docker Image
         run: docker build -f docker/php/Dockerfile -t $REGISTRY_NAME/tissup-api .
 
