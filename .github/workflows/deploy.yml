@@ -49,5 +49,5 @@ jobs:
           docker compose down || true
 
           echo "--Run new container--"
-          sudo docker compose up -d
+          docker compose up -d
           EOF
