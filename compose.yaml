@@ -3,6 +3,8 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
+        environment:
+            APP_ENV: dev
         volumes:
             - "./:/usr/src/app"
         restart: on-failure
@@ -31,8 +33,13 @@ services:
             MYSQL_DATABASE: ${DB_NAME}
         ports:
             - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
         networks:
             - tissup-api
+volumes:
+    db_data:
+
 networks:
     tissup-api:
         driver: bridge
