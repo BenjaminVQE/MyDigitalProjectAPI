@@ -46,7 +46,8 @@ jobs:
 
           echo "--Stop and remove container--"
           cd ~/TissupApi
-          docker compose down || true
+          docker compose stop || true
+          docker compose rm -f|| true
 
           echo "--Run new container--"
           docker compose up -d
