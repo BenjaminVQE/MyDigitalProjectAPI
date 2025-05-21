@@ -23,18 +23,20 @@ RUN mkdir -p /usr/src/app \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-#COPY --link docker/php/app.ini $PHP_INI_DIR/app.conf.d/
 COPY --link --chmod=755 docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
 WORKDIR /usr/src/app
 
 COPY ../../composer.json /usr/src/app/composer.json
-COPY ../../composer.lock /usr/src/app/composer.lock
 
 RUN PATH=$PATH:/usr/src/app/vendor/bin:bin
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN composer install --no-scripts --no-progress --prefer-dist
-
 COPY ../../ .
+
+RUN chown -R www-data:www-data /usr/src/app
+
+ENTRYPOINT ["docker-entrypoint"]
+
+CMD ["php-fpm"]
