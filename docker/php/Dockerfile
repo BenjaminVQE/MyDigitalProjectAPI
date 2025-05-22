@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.3-fpm as base
 
 RUN mkdir -p /usr/src/app \
     && apt-get update \
@@ -36,6 +36,18 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY ../../ .
 
 RUN chown -R www-data:www-data /usr/src/app
+
+FROM base AS prod
+
+RUN composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
+
+ENTRYPOINT ["docker-entrypoint"]
+
+CMD ["php-fpm"]
+
+FROM base AS dev
+
+RUN composer install --prefer-dist --no-progress --no-interaction
 
 ENTRYPOINT ["docker-entrypoint"]
 
