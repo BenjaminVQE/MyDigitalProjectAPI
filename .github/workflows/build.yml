@@ -26,11 +26,18 @@ jobs:
           echo "Updating .env"
           sed -i 's/^ROOT_PASSWORD=.*/ROOT_PASSWORD="'${ROOT_PASSWORD}'"/' .env
           sed -i 's/^APP_ENV=.*/APP_ENV="'prod'"/' .env
-      - name: Build Docker Image
+
+      - name: Build Docker Image PHP
         run: docker build -f docker/php/Dockerfile -t $REGISTRY_NAME/tissup-api .
 
       - name: Log in to Docker Registry
         run: echo $REGISTRY_PASSWORD | docker login $REGISTRY_NAME -u $REGISTRY_USERNAME --password-stdin
 
-      - name: Push Docker Image
+      - name: Push Docker Image PHP
         run: docker push $REGISTRY_NAME/tissup-api
+
+      - name: Build Docker Image NGINX
+        run: docker build -f docker/nginx/Dockerfile -t $REGISTRY_NAME/nginx-tissup .
+
+      - name: Push Docker Image PHP
+        run: docker push $REGISTRY_NAME/nginx-tissup
