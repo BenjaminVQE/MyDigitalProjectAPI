@@ -38,6 +38,11 @@ if grep -q ^DATABASE_URL= .env; then
 
     echo "Running doctrine migrations"
     php bin/console doctrine:migrations:migrate --no-interaction --all-or-nothing
+
+    if [ "${APP_ENV}" != "prod" ]; then
+        echo "Loading fixtures..."
+        php bin/console doctrine:fixtures:load --no-interaction
+    fi
 fi
 
 # Set permissions for cache/logs
