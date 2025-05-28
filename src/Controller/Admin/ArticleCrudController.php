@@ -3,10 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -15,14 +14,14 @@ class ArticleCrudController extends AbstractCrudController
         return Article::class;
     }
 
-    /*
+    #[AdminAction(routePath: '/latest-articles', routeName: 'latest')]
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('name')->setLabel('Nom'),
+            TextField::new('width')->setLabel('Longueur'),
+            TextField::new('height')->setLabel('Largeur'),
+            TextField::new('matter')->setLabel('Matière'),
         ];
     }
-    */
 }
