@@ -28,7 +28,7 @@ jobs:
           sed -i 's/^APP_ENV=.*/APP_ENV="'prod'"/' .env
 
       - name: Build Docker Image PHP
-        run: docker build -f docker/php/Dockerfile -t $REGISTRY_NAME/tissup-api .
+        run: docker build -f docker/php/Dockerfile -t $REGISTRY_NAME/tissup-api --target prod .
 
       - name: Log in to Docker Registry
         run: echo $REGISTRY_PASSWORD | docker login $REGISTRY_NAME -u $REGISTRY_USERNAME --password-stdin

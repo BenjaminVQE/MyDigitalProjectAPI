@@ -3,17 +3,6 @@ set -e
 
 echo "Starting PHP container with APP_ENV=${APP_ENV:-prod}"
 
-# Composer install (only if vendor is missing)
-if [ -z "$(ls -A 'vendor/' 2>/dev/null)" ]; then
-    if [ "${APP_ENV}" = "prod" ]; then
-        echo "Running composer install for production"
-        composer install --no-dev --prefer-dist --no-progress --no-interaction --optimize-autoloader
-    else
-        echo "Running composer install for development"
-        composer install --prefer-dist --no-progress --no-interaction
-    fi
-fi
-
 # Wait for database if needed
 if grep -q ^DATABASE_URL= .env; then
     echo 'Waiting for database to be ready...'
