@@ -42,6 +42,9 @@ load-fix: ## Load fixtures
 generate-jwt: ## Génère les clés JWT et met à jour .env.local
 	./generate-jwt.sh
 
+connect: ## Rentrer dans le conteneur php
+	docker exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 bash
+
 help: ## Display help
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-20s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
