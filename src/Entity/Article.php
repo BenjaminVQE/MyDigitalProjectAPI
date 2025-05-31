@@ -61,6 +61,9 @@ class Article
     #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'articles')]
     private Collection $cart;
 
+    #[ORM\Column(length: 50)]
+    private ?string $price = null;
+
     public function __construct()
     {
         $this->cart = new ArrayCollection();
@@ -142,6 +145,18 @@ class Article
         if ($this->cart->removeElement($cart)) {
             $cart->removeArticle($this);
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }
