@@ -19,9 +19,12 @@ class ArticleCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name')->setLabel('Nom'),
-            TextField::new('width')->setLabel('Longueur'),
+            TextField::new('width')->setLabel('Largeur'),
             TextField::new('height')->setLabel('Largeur'),
+            TextField::new('length')->setLabel('Longueur'),
+            TextField::new('price')->setLabel('Prix'),
             TextField::new('matter')->setLabel('Matière'),
+
         ];
     }
 }
