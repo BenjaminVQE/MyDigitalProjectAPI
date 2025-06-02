@@ -3,6 +3,7 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
+            target: dev
         environment:
             APP_ENV: dev
         volumes:
@@ -13,11 +14,10 @@ services:
         networks:
             - tissup-api
     nginx:
-        image: nginx:latest
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
         restart: on-failure
-        volumes:
-            - "./:/usr/src/app"
-            - "./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
         ports:
             - "8080:80"
         depends_on:
