@@ -55,6 +55,12 @@ class Article
     #[Assert\NotBlank]
     private ?string $matter = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $price = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $length = null;
+
     /**
      * @var Collection<int, Cart>
      */
@@ -142,6 +148,30 @@ class Article
         if ($this->cart->removeElement($cart)) {
             $cart->removeArticle($this);
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getLength(): ?string
+    {
+        return $this->length;
+    }
+
+    public function setLength(string $length): static
+    {
+        $this->length = $length;
 
         return $this;
     }
