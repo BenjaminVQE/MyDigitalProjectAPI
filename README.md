@@ -1,5 +1,6 @@
 # MyDigitalProjectAPI
 
+Tissup Configurateur
 Cette application est un projet d'école My DigitalSchool, pour l'entreprise Tissup.
 
 ## Installation
