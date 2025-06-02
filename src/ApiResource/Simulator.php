@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                             ],
                             'example' => [
                                 'pricePerProduct' => '5.90',
-                                'numberOfProduct' => '11',
+                                'numberOfProduct' => 11,
                                 'package' => true,
                             ]
                         ]
