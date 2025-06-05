@@ -15,6 +15,7 @@ class InfoMeController extends AbstractController
         $user = $this->getUser();
 
         return $this->json([
+            'id' => $user->getId(),
             'email' => $user->getUserIdentifier(),
             'lastName' => $user->getLastName(),
             'firstName' => $user->getFirstName(),
