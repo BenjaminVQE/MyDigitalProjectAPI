@@ -36,10 +36,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Articles', 'fa fa-tags', Article::class),
 
             MenuItem::section('Utilisateurs'),
-            MenuItem::linkToCrud('Utilisateurs', 'fa fa-tags', User::class),
+            MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-users', User::class),
 
             MenuItem::section('Commandes'),
-            MenuItem::linkToCrud('Commandes', 'fa fa-tags', Order::class),
+            MenuItem::linkToCrud('Commandes', 'fa-solid fa-barcode', Order::class),
         ];
     }
 

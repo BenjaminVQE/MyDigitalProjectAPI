@@ -4,8 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\Article;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -18,12 +18,15 @@ class ArticleCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name')->setLabel('Nom'),
-            TextField::new('width')->setLabel('Largeur'),
-            TextField::new('height')->setLabel('Largeur'),
-            TextField::new('length')->setLabel('Longueur'),
-            TextField::new('price')->setLabel('Prix'),
+            NumberField::new('width')->setLabel('Largeur (cm)')
+                ->formatValue(fn($value, $entity) => $value !== null ? $value . ' cm' : null),
+            NumberField::new('height')->setLabel('Hauteur (cm)')
+                ->formatValue(fn($value, $entity) => $value !== null ? $value . ' cm' : null),
+            NumberField::new('length')->setLabel('Longueur (cm)')
+                ->formatValue(fn($value, $entity) => $value !== null ? $value . ' cm' : null),
+            NumberField::new('price')->setLabel('Prix (Euro)')
+                ->formatValue(fn($value, $entity) => $value !== null ? $value . ' €' : null),
             TextField::new('matter')->setLabel('Matière'),
-
         ];
     }
 }
