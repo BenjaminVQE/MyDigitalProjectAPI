@@ -14,7 +14,6 @@ class ArticleCrudController extends AbstractCrudController
         return Article::class;
     }
 
-    #[AdminAction(routePath: '/latest-articles', routeName: 'latest')]
     public function configureFields(string $pageName): iterable
     {
         return [
