@@ -7,9 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class InfoController extends AbstractController
+class InfoMeController extends AbstractController
 {
-    #[Route('/api/me', name: 'api_info', methods: ['GET'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function __invoke(): JsonResponse
     {

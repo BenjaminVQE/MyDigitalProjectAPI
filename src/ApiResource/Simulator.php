@@ -3,7 +3,6 @@
 namespace App\ApiResource;
 
 use ArrayObject;
-use Model\RequestBody;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiResource;
 use App\Controller\SimulatorController;
