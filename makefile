@@ -39,9 +39,6 @@ migrate: ## Migrate migrations to data base
 load-fix: ## Load fixtures
 	docker container exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 php bin/console doctrine:fixtures:load
 
-generate-jwt: ## Génère les clés JWT et met à jour .env.local
-	./generate-jwt.sh
-
 connect: ## Rentrer dans le conteneur php
 	docker exec -it $(PROJECT_NAME)-$(CONTAINER_NAME)-1 bash
 
