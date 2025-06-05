@@ -51,4 +51,7 @@ jobs:
 
           echo "--Run new container--"
           docker compose up -d
+
+          echo "--Copy config NGINX"
+          docker cp default.conf tissupapi-nginx-1:/etc/nginx/conf.d/default.conf
           EOF
