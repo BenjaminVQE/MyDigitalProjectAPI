@@ -13,6 +13,7 @@ jobs:
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       REGISTRY_NAME: ${{ secrets.REGISTRY_NAME }}
       ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
+      JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
 
     steps:
       - name: Checkout code
@@ -25,6 +26,7 @@ jobs:
         run: |
           echo "Updating .env"
           sed -i 's/^ROOT_PASSWORD=.*/ROOT_PASSWORD="'${ROOT_PASSWORD}'"/' .env
+          sed -i 's/^JWT_PASSPHRASE=.*/JWT_PASSPHRASE="'${JWT_PASSPHRASE}'"/' .env
           sed -i 's/^APP_ENV=.*/APP_ENV="'prod'"/' .env
 
       - name: Build Docker Image PHP
