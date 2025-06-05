@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: SimulatorController::class,
             openapi: new Model\Operation(
                 summary: 'Simulate price',
-                description: 'Simulate the total price of a cart based on unit price, quantity, and selected package.',
+                description: 'Simulate the total price of a order based on unit price, quantity, and selected package.',
                 requestBody: new Model\RequestBody(
                     content: new \ArrayObject([
                         'application/json' => [
