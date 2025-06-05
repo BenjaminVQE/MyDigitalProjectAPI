@@ -14,9 +14,12 @@ use App\Repository\ArticleRepository;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_NAME', fields: ['name'])]
+#[UniqueEntity('name', message: "Ce nom existe déjà pour un autre article")]
 #[ApiResource(
     operations: [
         new Get(),

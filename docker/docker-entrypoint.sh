@@ -34,6 +34,8 @@ if grep -q ^DATABASE_URL= .env; then
     fi
 fi
 
+php bin/console lexik:jwt:generate-keypair
+
 # Set permissions for cache/logs
 echo "Setting permissions on var/"
 setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
