@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Article;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use Symfony\Component\Security\Core\User\UserInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
@@ -35,6 +38,14 @@ class DashboardController extends AbstractDashboardController
             MenuItem::section('Utilisateurs'),
             MenuItem::linkToCrud('Utilisateurs', 'fa fa-tags', User::class),
 
+            MenuItem::section('Commandes'),
+            MenuItem::linkToCrud('Commandes', 'fa fa-tags', Order::class),
         ];
+    }
+
+    public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        return parent::configureUserMenu($user)
+            ->setName($user->getFullName());
     }
 }
