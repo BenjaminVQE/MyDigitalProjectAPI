@@ -2,20 +2,20 @@
 
 namespace App\Entity;
 
-use App\Entity\Cart;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
 use ApiPlatform\Metadata\GetCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_NAME', fields: ['name'])]
@@ -40,10 +40,12 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
+    #[Groups(['order:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
@@ -59,20 +61,23 @@ class Article
     private ?string $matter = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank]
+    #[Groups(['order:read'])]
     private ?string $price = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank]
     private ?string $length = null;
 
     /**
-     * @var Collection<int, Cart>
+     * @var Collection<int, OrderArticle>
      */
-    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'articles')]
-    private Collection $cart;
+    #[ORM\OneToMany(targetEntity: OrderArticle::class, mappedBy: 'article')]
+    private Collection $orderArticles;
 
     public function __construct()
     {
-        $this->cart = new ArrayCollection();
+        $this->orderArticles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,33 +133,6 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, Cart>
-     */
-    public function getCart(): Collection
-    {
-        return $this->cart;
-    }
-
-    public function addCart(Cart $cart): static
-    {
-        if (!$this->cart->contains($cart)) {
-            $this->cart->add($cart);
-            $cart->addArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCart(Cart $cart): static
-    {
-        if ($this->cart->removeElement($cart)) {
-            $cart->removeArticle($this);
-        }
-
-        return $this;
-    }
-
     public function getPrice(): ?string
     {
         return $this->price;
@@ -175,6 +153,36 @@ class Article
     public function setLength(string $length): static
     {
         $this->length = $length;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderArticle>
+     */
+    public function getOrderArticles(): Collection
+    {
+        return $this->orderArticles;
+    }
+
+    public function addOrderArticle(OrderArticle $orderArticle): static
+    {
+        if (!$this->orderArticles->contains($orderArticle)) {
+            $this->orderArticles->add($orderArticle);
+            $orderArticle->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderArticle(OrderArticle $orderArticle): static
+    {
+        if ($this->orderArticles->removeElement($orderArticle)) {
+            // set the owning side to null (unless already changed)
+            if ($orderArticle->getArticle() === $this) {
+                $orderArticle->setArticle(null);
+            }
+        }
 
         return $this;
     }

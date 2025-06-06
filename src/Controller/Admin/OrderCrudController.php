@@ -20,11 +20,6 @@ class OrderCrudController extends AbstractCrudController
     {
 
 
-        return [
-            TextField::new('cart')->setLabel('Panier'),
-            ChoiceField::new('user')
-                ->setChoices(fn(?User $user) => $user->getFullName())
-                ->setLabel('Utilisateur'),
-        ];
+        return [];
     }
 }
