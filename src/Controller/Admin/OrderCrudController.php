@@ -2,12 +2,11 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\User;
 use App\Entity\Order;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminAction;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 
 class OrderCrudController extends AbstractCrudController
 {
@@ -18,8 +17,19 @@ class OrderCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        return [
+            AssociationField::new('user')
+                ->formatValue(function ($value, $entity) {
+                    return $value?->getFullName();
+                }),
+            CollectionField::new('orderArticles')
+                ->setTemplatePath('admin/order_articles.html.twig')
+        ];
+    }
 
-
-        return [];
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable(\EasyCorp\Bundle\EasyAdminBundle\Config\Action::NEW, \EasyCorp\Bundle\EasyAdminBundle\Config\Action::EDIT);
     }
 }

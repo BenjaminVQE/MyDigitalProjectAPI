@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\OrderArticleRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderArticleRepository::class)]
 class OrderArticle
@@ -18,10 +19,12 @@ class OrderArticle
 
     #[ORM\ManyToOne(inversedBy: 'orderArticles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order:read'])]
     private ?Article $article = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderArticles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order:read'])]
     private ?Order $order = null;
 
     public function getId(): ?int

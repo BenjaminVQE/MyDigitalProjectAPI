@@ -1,0 +1,11 @@
+<ul>
+	{% for orderArticle in field.value %}
+		<a href="{{ path('admin', { 'crudControllerFqcn': 'App\\Controller\\Admin\\ArticleCrudController', 'action': 'detail', 'entityId': orderArticle.article.id }) }}">
+			{{ orderArticle.article.name }}
+		</a>
+		x
+		{{orderArticle.quantity}}
+	{% else %}
+		<li>Aucun article</li>
+	{% endfor %}
+</ul>
