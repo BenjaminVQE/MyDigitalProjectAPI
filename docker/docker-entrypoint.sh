@@ -34,7 +34,12 @@ if grep -q ^DATABASE_URL= .env; then
     fi
 fi
 
-php bin/console lexik:jwt:generate-keypair
+if [ ! -d config/jwt ]; then
+    echo "Generating JWT keypair..."
+    php bin/console lexik:jwt:generate-keypair
+else
+    echo "JWT keypair already exists, skipping generation."
+fi
 
 # Set permissions for cache/logs
 echo "Setting permissions on var/"
