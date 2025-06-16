@@ -1,0 +1,13 @@
+<ul>
+	{% for orderArticle in field.value %}
+		<li>
+			<a href="{{ path('admin_article_detail', { 'entityId': orderArticle.article.id }) }}">
+				{{ orderArticle.article.name }}
+			</a>
+			×
+			{{ orderArticle.quantity }}
+		</li>
+	{% else %}
+		<li>Aucun article</li>
+	{% endfor %}
+</ul>

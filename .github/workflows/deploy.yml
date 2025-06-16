@@ -18,8 +18,6 @@ jobs:
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       ROOT_PASSWORD: ${{ secrets.ROOT_PASSWORD }}
-      SERVER_NAME: ${{ vars.SERVER_NAME }}
-      TLS: ${{ vars.TLS }}
 
     steps:
       - name: Checkout code
